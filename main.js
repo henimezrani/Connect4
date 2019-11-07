@@ -24,7 +24,6 @@ function Game(){
 }
 
 var initialize = function() {
-
     this.playBoard = [[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0]]
     /*var columns = [];
     for (var i = 0 ; i < 6 ; i++){
@@ -36,7 +35,7 @@ var initialize = function() {
 }
 
 var addValue = function(number, column) {
-    for (var i = this.playBoard.length; i >= 0; i--) {
+    for (var i = this.playBoard.length-1; i >= 0; i--) {
         if (this.playBoard[i][column] === 0){
             this.playBoard[i][column] = number
             break;  
@@ -47,10 +46,10 @@ var addValue = function(number, column) {
 
 
 var check = function(){
-    for (var i = this.playBoard.length; i >= 0; i--) {
-        for (var j = this.playBoard[i].length; j >= 0; j--) {
+    for (var i = this.playBoard.length-1; i >= 0; i--) {
+        for (var j = this.playBoard[i].length-1; j >= 0; j--) {
             for(var k = 0 ; k < 8 ; k++) {
-                
+                var boo = true
 
                 var iIndexes = iterations.i[k].map(x => x + i);
                 var jIndexes = iterations.j[k].map(x => x + j);
@@ -74,8 +73,8 @@ var check = function(){
                 jIndexes.filter(x => x>=this.playBoard[i].length)
 
                 */
-
-                if ( (this.playBoard[i][j] === this.playBoard[iIndexes[0]][jIndexes[0]]) && (this.playBoard[i][j] === this.playBoard[iIndexes[1]][jIndexes[1]]) && (this.playBoard[i][j] === this.playBoard[iIndexes[2]][jIndexes[2]]) ){
+                if ( (this.playBoard[i][j] !==0) && (this.playBoard[i][j] === this.playBoard[iIndexes[0]][jIndexes[0]]) && (this.playBoard[i][j] === this.playBoard[iIndexes[1]][jIndexes[1]]) && (this.playBoard[i][j] === this.playBoard[iIndexes[2]][jIndexes[2]]) ){
+                    
                     console.log("there is a correct answer")
                 }
             }
@@ -88,4 +87,8 @@ var check = function(){
 newGame = Game();
 newGame.initialize();
 console.table(newGame.playBoard);
+newGame.addValue(1,2)
+newGame.addValue(1,1)
+newGame.addValue(1,2)
+newGame.addValue(1,2)
 
