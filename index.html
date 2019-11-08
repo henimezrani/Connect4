@@ -10,14 +10,31 @@
     <section id="welcome">
         <main id="main1">
             <h1>Welcome!</h1>
-            <p>Player 1's name:</p><input type="text" id="player1name" value="Player 1">
-            <p>Your favorite color:</p><input type="text" id="player1color" value="yellow if invalid input">
-            <p>Player 2's name:</p><input type="text" id="player2name" value="Player 2">
-            <p>Your favorite color:</p><input type="text" id="player1color" value="red if invalid input">
+            <div id="inputs">
+
+                <div id="place">
+                    <p>Player 1's name:</p><input type="text" id="player1name" placeholder="Player 1">
+                </div>
+                <div id="place">
+                    <p>Your favorite color:</p><input type="text" id="player1color" placeholder="text or hex - yellow if invalid input">
+                </div>
+                <div id="place">
+                    <p>Player 2's name:</p><input type="text" id="player2name" placeholder="Player 2">
+                </div>
+                <div id="place">
+                    <p>Your favorite color:</p><input type="text" id="player2color" placeholder="text or hex - red if invalid input">
+                </div>
+
+            </div>
+            <div> <button id="startGame">Play!</button></div>
         </main>
     </section>
     <section id="game">
         <main id="stats">
+
+        </main>
+
+        <main id="prePlayBoard">
 
         </main>
         <main id="playBoard">
