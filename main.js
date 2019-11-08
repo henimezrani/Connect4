@@ -1,4 +1,6 @@
-// ***************** Global vars
+//$('#game').hide()
+$('#winner').hide()
+    // ***************** Global vars
 var plus = [1, 2, 3];
 var zero = [0, 0, 0];
 var minus = [-1, -2, -3];
@@ -20,38 +22,52 @@ function Game() {
         name: "",
         number: 1,
         color: 'red',
-        score: 0,
-        start: true
+        score: 0
     }
     game.player2 = {
         name: "",
         number: 2,
         color: 'yellow',
-        score: 0,
-        start: false
+        score: 0
     }
     game.totalPlays = 42;
-
+    game.currentPlayer = true; // true when player one turn
 
     game.initialize = initialize;
     game.addValue = addValue;
     game.check = check;
     game.updateScore = updateScore;
-    game.currentPlayer = currentPlayer;
+
+    game.updateCurrentPlayer = updateCurrentPlayer;
     //game.play = play;
 
     return game;
 }
 
-var initialize = function() {
-    this.playBoard = [
+var initialize = function(nCols, nRows) {
+    for (let i = 0; i < nRows; i++) {
+        var tmpArr = []
+        for (let j = 0; j < nCols; j++) {
+            tmpArr.push(0);
+
+        }
+        this.playBoard.push(tmpArr);
+    }
+    for (let i = 0; i < nCols; i++) {
+        $('#playBoard').append('<div class="column" id="' + i + '"></div>')
+        for (let j = 0; j < nRows; j++) {
+            $('#' + i).append('<div class="row" id="c' + i + 'r' + j + '"><div>')
+        }
+    }
+
+    /*this.playBoard = [
         [0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0]
-    ]
+    ]*/
 
     /*var columns = [];
     for (var i = 0 ; i < 6 ; i++){
@@ -60,7 +76,9 @@ var initialize = function() {
     for (var i = 0 ; i < 7 ; i++) {
         this.playBoard[i] = columns
     }*/
-    this.totalPlays = 42;
+
+
+    this.totalPlays = nRows * nCols;
 }
 
 var addValue = function(number, column) {
@@ -109,17 +127,16 @@ var check = function() {
 
                 */
                 if ((this.playBoard[i][j] !== 0) && (this.playBoard[i][j] === this.playBoard[iIndexes[0]][jIndexes[0]]) && (this.playBoard[i][j] === this.playBoard[iIndexes[1]][jIndexes[1]]) && (this.playBoard[i][j] === this.playBoard[iIndexes[2]][jIndexes[2]])) {
-
-                    console.log("there is a correct answer")
+                    return true;
                 }
             }
-            console.log("no correct answer")
         }
     }
+    return false
 }
 
-var updateScore = function(n) {
-    if (n === 1) {
+var updateScore = function() {
+    if (this.currentPlayer) {
         this.player1.score++;
         alert(this.player1.name + " wins!");
 
@@ -130,9 +147,8 @@ var updateScore = function(n) {
     this.initialize();
 }
 
-var currentPlayer = function() {
-    this.player1.start = !this.player1.start
-    this.player2.start = !this.player2.start
+var updateCurrentPlayer = function() {
+    this.currentPlayer = !this.currentPlayer;
 }
 
 /*
@@ -155,7 +171,7 @@ var play = function() {
 
 
 newGame = Game();
-newGame.initialize();
+newGame.initialize(7, 6);
 console.table(newGame.playBoard);
 newGame.addValue(1, 2)
 newGame.addValue(1, 1)
