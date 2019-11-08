@@ -3,6 +3,8 @@
 
 
 
+
+
 //$('#game').hide()
 $('#winner').hide()
     // ***************** Global vars
@@ -26,18 +28,14 @@ function Player(name, number, color){
     return player;
 }
 
-
-
-
-
 // ***************** Constructors
 
-function Game() {
+function Game(player1name,player1color,player2name,player2color) {
     var game = {};
 
     game.playBoard = [];
-    game.player1 = Player("Heni", 1, "yellow");
-    game.player2 = Player("Opponent", 2, "red");
+    game.player1 = Player(player1name, 1, validateColor(player1color,"yellow"));
+    game.player2 = Player(player2name, 2, validateColor(player2color,"red"));
     game.totalPlays = 42;
     game.currentPlayer; // true when player one turn
 
@@ -55,6 +53,8 @@ function Game() {
 var initialize = function(nCols, nRows) {
     this.playBoard = [];
     $('#playBoard').html('');
+    this.currentPlayer = this.player1;
+
     for (var i = 0; i < nRows; i++) {
         var tmpArr = []
         for (var j = 0; j < nCols; j++) {
@@ -104,23 +104,19 @@ var addValue = function(column) {
     }
     if (!canAdd) {
         alert("column full");
-        updateCurrentPlayer();
+        return;
     }
-    console.log("updating")
-    updateCurrentPlayer();
+    this.check();
 
 }
 
 
 
 var check = function() {
-    var count =0;
-    var total = 0;
-    var breaking =  0
+
     for (var i = this.playBoard.length - 1; i >= 0; i--) {
         for (var j = this.playBoard[i].length - 1; j >= 0; j--) {
             for (var k = 0; k < 8; k++) {
-                total ++;
                 var boo = true
 
                 var iIndexes = iterations.i[k].map(x => x + i);
@@ -132,23 +128,17 @@ var check = function() {
                     }
                 }
 
-                if (!boo) {
-                    breaking++
-
-                } else if ((this.playBoard[i][j] === this.playBoard[iIndexes[0]][jIndexes[0]]) && (this.playBoard[i][j] === this.playBoard[iIndexes[1]][jIndexes[1]]) && (this.playBoard[i][j] === this.playBoard[iIndexes[2]][jIndexes[2]])) {
-                    count++;
+                if (boo && (this.playBoard[i][j] === this.playBoard[iIndexes[0]][jIndexes[0]]) && (this.playBoard[i][j] === this.playBoard[iIndexes[1]][jIndexes[1]]) && (this.playBoard[i][j] === this.playBoard[iIndexes[2]][jIndexes[2]])) {
                     if (this.playBoard[i][j] !== 0){
-                        return true;
+                        this.updateScore();
                     }
                 }
                 
             }
         }
-    }-
-    console.log("should test " + total)
-    console.log("tested " + count)
-    console.log("breaking " + breaking)
-    return false
+    }
+    this.updateCurrentPlayer();
+    return false;
 }
 
 var updateScore = function() {
@@ -166,32 +156,13 @@ var updateCurrentPlayer = function() {
     
 }
 
-/*
-var play = function() {
-    $column.on('click', function() {
 
-        
-        //switch player
-        //check
-        // if true update score
-        //else keep playing
-
-
-
-
-    })
-}*/
-
-
-newGame = Game();
+newGame = Game("Heni", "blue", "opponent", "hur");
 newGame.initialize(7, 6);
 console.table(newGame.playBoard);
 
 $('.column').on('click', function() {
     newGame.addValue($(this).attr('id'));
-    if (newGame.check()) {
-        newGame.updateScore();
-    }
     
 })
 
@@ -205,3 +176,37 @@ $('#updateSize').on('click', function() {
     var newRows = $('#changeCols').val()
     newGame.initialize(newCol,newRows)
 })
+
+function validateColor(input,defaultVal){
+    var colorValidation = ["Pink", "LightPink", "HotPink", "DeepPink", "PaleVioletRed", "MediumVioletRed", "LightSalmon", "Salmon", "DarkSalmon", "LightCoral", "IndianRed", "Crimson", "Firebrick", "DarkRed", "Red", 
+    "OrangeRed", "Tomato", "Coral", "DarkOrange", "Orange", "Yellow", "LightYellow", "LemonChiffon", "LightGoldenrodYellow ", "PapayaWhip", "Moccasin", "PeachPuff", "PaleGoldenrod", "Khaki", "DarkKhaki", "Gold", 
+    "Cornsilk", "BlanchedAlmond", "Bisque", "NavajoWhite", "Wheat", "Burlywood", "Tan", "RosyBrown", "SandyBrown", "Goldenrod", "DarkGoldenrod", "Peru", "Chocolate", "SaddleBrown", "Sienna", "Brown", "Maroon", 
+    "DarkOliveGreen", "Olive", "OliveDrab", "YellowGreen", "LimeGreen", "Lime", "LawnGreen", "Chartreuse", "GreenYellow", "SpringGreen", "MediumSpringGreen ", "LightGreen", "PaleGreen", "DarkSeaGreen", "MediumAquamarine", 
+    "MediumSeaGreen", "SeaGreen", "ForestGreen", "Green", "DarkGreen", "Aqua", "Cyan", "LightCyan", "PaleTurquoise", "Aquamarine", "Turquoise", "MediumTurquoise", "DarkTurquoise", "LightSeaGreen", "CadetBlue", 
+    "DarkCyan", "Teal", "LightSteelBlue", "PowderBlue", "LightBlue", "SkyBlue", "LightSkyBlue", "DeepSkyBlue", "DodgerBlue", "CornflowerBlue", "SteelBlue", "RoyalBlue", "Blue", "MediumBlue", "DarkBlue", "Navy", 
+    "MidnightBlue", "Lavender", "Thistle", "Plum", "Violet", "Orchid", "Fuchsia", "Magenta", "MediumOrchid", "MediumPurple", "BlueViolet", "DarkViolet", "DarkOrchid", "DarkMagenta", "Purple", "Indigo", "DarkSlateBlue", 
+    "SlateBlue", "MediumSlateBlue ", "White", "Snow", "Honeydew", "MintCream", "Azure", "AliceBlue", "GhostWhite", "WhiteSmoke", "Seashell", "Beige", "OldLace", "FloralWhite", "Ivory", "AntiqueWhite", "Linen", 
+    "LavenderBlush", "MistyRose", "Gainsboro", "LightGray", "Silver", "DarkGray", "Gray", "DimGray", "LightSlateGray", "SlateGray", "DarkSlateGray", "Black"].map( x => x.toLowerCase());
+    var hexValidation = ["a", "b", "c", "d", "e", "f", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0"].join('')
+
+    var hex = true;
+    var htmlColor = true;
+    for (var i = 1 ; i < input.length ; i++) {
+        if (hexValidation.indexOf(input[i].toLowerCase()) < 0) {
+            hex = false;
+        }
+        if ( !( (input.length === 7 || input.length === 4) && (input[0] === "#") ) ) {
+            hex = false;
+        }
+    }
+
+    if (colorValidation.indexOf(input) < 0){
+        htmlColor = false;
+    }
+
+    if (hex || htmlColor){
+        return input;
+    }
+    return defaultVal;
+
+}
