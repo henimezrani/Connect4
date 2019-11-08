@@ -26,13 +26,13 @@ function Game() {
     game.player1 = {
         name: "",
         number: 1,
-        color: 'red',
+        color: 'yellow',
         score: 0
     }
     game.player2 = {
         name: "",
         number: 2,
-        color: 'yellow',
+        color: 'red',
         score: 0
     }
     game.totalPlays = 42;
@@ -86,33 +86,47 @@ var initialize = function(nCols, nRows) {
     this.totalPlays = nRows * nCols;
 }
 
-var addValue = function(number, column) {
-    var boo = true;
+var addValue = function(column) {
+    var number = 2;
+    if (this.currentPlayer){
+        number = 1;
+    }
+    var canAdd = false;
     for (var i = this.playBoard.length - 1; i >= 0; i--) {
         if (this.playBoard[i][column] === 0) {
             this.playBoard[i][column] = number
-            boo = false; // full colun
+            canAdd = true; // full colun
+            if (this.currentPlayer){
+                $('#c' + column + 'r' + i).css('background-color', this.player1.color)
+            } else {
+                $('#c' + column + 'r' + i).css('background-color', this.player2.color)
+            }
             break;
         }
     }
-    if (!boo) {
-        // handle full columns
+    if (!canAdd) {
+        alert('full column')
     }
+    this.currentPlayer = !this.currentPlayer;
 
 }
 
 
 
 var check = function() {
+    var count =0;
+    var total = 0;
+    var breaking =  0
     for (var i = this.playBoard.length - 1; i >= 0; i--) {
         for (var j = this.playBoard[i].length - 1; j >= 0; j--) {
             for (var k = 0; k < 8; k++) {
+                total ++;
                 var boo = true
 
                 var iIndexes = iterations.i[k].map(x => x + i);
                 var jIndexes = iterations.j[k].map(x => x + j);
 
-
+                console.log(i,j,iIndexes,jIndexes)
                 for (var l = 0; l < iIndexes.length; l++) {
                     if ((iIndexes[l] < 0) || (jIndexes[l] < 0) || (iIndexes[l] >= this.playBoard.length) || (jIndexes >= this.playBoard[i].length)) {
                         boo = false;
@@ -120,23 +134,23 @@ var check = function() {
                 }
 
                 if (!boo) {
-                    break;
+                    console.log("breaking")
+                    breaking++
+
+                } else if ((this.playBoard[i][j] === this.playBoard[iIndexes[0]][jIndexes[0]]) && (this.playBoard[i][j] === this.playBoard[iIndexes[1]][jIndexes[1]]) && (this.playBoard[i][j] === this.playBoard[iIndexes[2]][jIndexes[2]])) {
+                    console.log(this.playBoard[i][j])
+                    count++;
+                    if (this.playBoard[i][j] !== 0){
+                        return true;
+                    }
                 }
-
-                /*********** Another method to keep in mind
-
-                jIndexes.filter(x => x<0)
-                iIndexes.filter(x => x>=this.playBoard.length)
-                jIndexes.filter(x => x<0)
-                jIndexes.filter(x => x>=this.playBoard[i].length)
-
-                */
-                if ((this.playBoard[i][j] !== 0) && (this.playBoard[i][j] === this.playBoard[iIndexes[0]][jIndexes[0]]) && (this.playBoard[i][j] === this.playBoard[iIndexes[1]][jIndexes[1]]) && (this.playBoard[i][j] === this.playBoard[iIndexes[2]][jIndexes[2]])) {
-                    return true;
-                }
+                
             }
         }
-    }
+    }-
+    console.log("should test " + total)
+    console.log("tested " + count)
+    console.log("breaking " + breaking)
     return false
 }
 
@@ -178,8 +192,3 @@ var play = function() {
 newGame = Game();
 newGame.initialize(7, 6);
 console.table(newGame.playBoard);
-newGame.addValue(1, 2)
-newGame.addValue(1, 1)
-newGame.addValue(1, 2)
-newGame.addValue(1, 2)
-newGame.addValue(1, 2)
