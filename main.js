@@ -24,13 +24,13 @@ function Game() {
 
     game.playBoard = [];
     game.player1 = {
-        name: "",
+        name: "Player 1",
         number: 1,
         color: 'yellow',
         score: 0
     }
     game.player2 = {
-        name: "",
+        name: "Player 2",
         number: 2,
         color: 'red',
         score: 0
@@ -50,17 +50,19 @@ function Game() {
 }
 
 var initialize = function(nCols, nRows) {
-    for (let i = 0; i < nRows; i++) {
+    this.playBoard = [];
+    $('#playBoard').html('');
+    for (var i = 0; i < nRows; i++) {
         var tmpArr = []
-        for (let j = 0; j < nCols; j++) {
+        for (var j = 0; j < nCols; j++) {
             tmpArr.push(0);
 
         }
         this.playBoard.push(tmpArr);
     }
-    for (let i = 0; i < nCols; i++) {
+    for (var i = 0; i < nCols; i++) {
         $('#playBoard').append('<div class="column" id="' + i + '"></div>')
-        for (let j = 0; j < nRows; j++) {
+        for (var j = 0; j < nRows; j++) {
             $('#' + i).append('<div class="row" id="c' + i + 'r' + j + '"><div>')
         }
     }
@@ -105,8 +107,10 @@ var addValue = function(column) {
         }
     }
     if (!canAdd) {
-        alert('full column')
+        alert("column full");
+        this.currentPlayer = !this.currentPlayer;
     }
+
     this.currentPlayer = !this.currentPlayer;
 
 }
@@ -126,7 +130,6 @@ var check = function() {
                 var iIndexes = iterations.i[k].map(x => x + i);
                 var jIndexes = iterations.j[k].map(x => x + j);
 
-                console.log(i,j,iIndexes,jIndexes)
                 for (var l = 0; l < iIndexes.length; l++) {
                     if ((iIndexes[l] < 0) || (jIndexes[l] < 0) || (iIndexes[l] >= this.playBoard.length) || (jIndexes >= this.playBoard[i].length)) {
                         boo = false;
@@ -134,11 +137,9 @@ var check = function() {
                 }
 
                 if (!boo) {
-                    console.log("breaking")
                     breaking++
 
                 } else if ((this.playBoard[i][j] === this.playBoard[iIndexes[0]][jIndexes[0]]) && (this.playBoard[i][j] === this.playBoard[iIndexes[1]][jIndexes[1]]) && (this.playBoard[i][j] === this.playBoard[iIndexes[2]][jIndexes[2]])) {
-                    console.log(this.playBoard[i][j])
                     count++;
                     if (this.playBoard[i][j] !== 0){
                         return true;
@@ -155,7 +156,7 @@ var check = function() {
 }
 
 var updateScore = function() {
-    if (this.currentPlayer) {
+    if (!this.currentPlayer) {
         this.player1.score++;
         alert(this.player1.name + " wins!");
 
@@ -163,7 +164,7 @@ var updateScore = function() {
         this.player2.score++;
         alert(this.player2.name + " wins!");
     }
-    this.initialize();
+    this.initialize(7,6);
 }
 
 var updateCurrentPlayer = function() {
@@ -187,8 +188,14 @@ var play = function() {
 }*/
 
 
-
-
 newGame = Game();
-newGame.initialize(7, 6);
+newGame.initialize(13, 9);
 console.table(newGame.playBoard);
+
+$('.column').on('click', function() {
+    newGame.addValue($(this).attr('id'));
+    if (newGame.check()) {
+        newGame.updateScore();
+    }
+    
+})
