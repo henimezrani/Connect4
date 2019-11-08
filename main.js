@@ -1,3 +1,8 @@
+// On hover on column add buttons on top that take color when column on hover
+
+
+
+
 //$('#game').hide()
 $('#winner').hide()
     // ***************** Global vars
