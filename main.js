@@ -15,6 +15,19 @@ var iterations = {
     j: [zero, minus, minus, minus, zero, plus, plus, plus]
 }
 
+function Player(name, number, color){
+    var player = {};
+
+    player.name = name,
+    player.number = number,
+    player.color = color,
+    player.score = 0
+
+    return player;
+}
+
+
+
 
 
 // ***************** Constructors
@@ -23,20 +36,10 @@ function Game() {
     var game = {};
 
     game.playBoard = [];
-    game.player1 = {
-        name: "Player 1",
-        number: 1,
-        color: 'yellow',
-        score: 0
-    }
-    game.player2 = {
-        name: "Player 2",
-        number: 2,
-        color: 'red',
-        score: 0
-    }
+    game.player1 = Player("Heni", 1, "yellow");
+    game.player2 = Player("Opponent", 2, "red");
     game.totalPlays = 42;
-    game.currentPlayer = true; // true when player one turn
+    game.currentPlayer; // true when player one turn
 
     game.initialize = initialize;
     game.addValue = addValue;
@@ -89,29 +92,22 @@ var initialize = function(nCols, nRows) {
 }
 
 var addValue = function(column) {
-    var number = 2;
-    if (this.currentPlayer){
-        number = 1;
-    }
+
     var canAdd = false;
     for (var i = this.playBoard.length - 1; i >= 0; i--) {
         if (this.playBoard[i][column] === 0) {
-            this.playBoard[i][column] = number
+            this.playBoard[i][column] = this.currentPlayer.number;
             canAdd = true; // full colun
-            if (this.currentPlayer){
-                $('#c' + column + 'r' + i).css('background-color', this.player1.color)
-            } else {
-                $('#c' + column + 'r' + i).css('background-color', this.player2.color)
-            }
+            $('#c' + column + 'r' + i).css('background-color', this.currentPlayer.color)
             break;
         }
     }
     if (!canAdd) {
         alert("column full");
-        this.currentPlayer = !this.currentPlayer;
+        updateCurrentPlayer();
     }
-
-    this.currentPlayer = !this.currentPlayer;
+    console.log("updating")
+    updateCurrentPlayer();
 
 }
 
@@ -156,19 +152,18 @@ var check = function() {
 }
 
 var updateScore = function() {
-    if (!this.currentPlayer) {
-        this.player1.score++;
-        alert(this.player1.name + " wins!");
-
-    } else {
-        this.player2.score++;
-        alert(this.player2.name + " wins!");
-    }
+    this.currentPlayer.score++;
+    alert(this.currentPlayer.name + " wins!");
     this.initialize(7,6);
 }
 
 var updateCurrentPlayer = function() {
-    this.currentPlayer = !this.currentPlayer;
+    if (this.currentPlayer === this.player1) {
+        this.currentPlayer = this.player2;
+    } else {
+        this.currentPlayer = this.player1;
+    }
+    
 }
 
 /*
@@ -189,7 +184,7 @@ var play = function() {
 
 
 newGame = Game();
-newGame.initialize(13, 9);
+newGame.initialize(7, 6);
 console.table(newGame.playBoard);
 
 $('.column').on('click', function() {
@@ -198,4 +193,15 @@ $('.column').on('click', function() {
         newGame.updateScore();
     }
     
+})
+
+$('#changeSize').on('click', function() {
+    //Make window aprear
+    // choose new size
+})
+
+$('#updateSize').on('click', function() {
+    var newCol = $('#changeCols').val()
+    var newRows = $('#changeCols').val()
+    newGame.initialize(newCol,newRows)
 })
