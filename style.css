@@ -40,10 +40,7 @@ h1 {
     justify-content: space-around;
     align-items: center;
     text-align: center;
-    height: 80%;
-    width: 80%;
     padding: 25px;
-    margin: 0 auto;
     background-color: blue;
     border: 7px solid lightblue;
     box-shadow: 2px 2px grey;
@@ -55,10 +52,7 @@ h1 {
     justify-content: space-around;
     align-items: center;
     text-align: center;
-    height: 80%;
-    width: 80%;
     padding: 10px 25px;
-    margin: 0 auto;
     background-color: lightgray;
     border: 1px solid lightblue;
     box-shadow: 2px 2px grey;
@@ -75,7 +69,7 @@ h1 {
 
 .row {
     flex: 1;
-    margin: 10px auto;
+    margin: 5px auto;
     width: 60px;
     height: 60px;
     background-color: white;
@@ -127,6 +121,22 @@ input {
     border-bottom: 2px solid lightgrey;
 }
 
+#rows {
+    width: 12%;
+}
+
+span {
+    width: 2%;
+    height: 30%;
+    margin-block-start: .2em;
+    margin-block-end: .2em;
+    margin: 0px 2% 0px 2%;
+}
+
+#columns {
+    width: 12%;
+}
+
 input:hover {
     border-bottom: 2px solid grey;
 }
@@ -134,4 +144,62 @@ input:hover {
 input:focus {
     outline: none;
     border-bottom: 2px solid darkgrey;
+}
+
+#playerStats {
+    margin: 0px auto;
+    width: 30%
+}
+
+#firstPlayer {
+    margin: auto 0px;
+    height: 40%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#secondPlayer {
+    margin: auto 0px;
+    height: 40%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#main-section {
+    display: flex;
+    flex-direction: row;
+}
+
+#allBoard {
+    height: 60%;
+    width: 60%;
+    margin: 0px 5%px 0px 5%;
+}
+
+.centeredContent {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 70%;
+    height: 60%;
+}
+
+#p1stats {
+    border: 2px solid;
+    border-color: white;
+}
+
+#p2stats {
+    border: 2px solid;
+    border-color: white;
+}
+
+h5 {
+    margin-block-start: 0em;
+    margin-block-end: 0em;
 }

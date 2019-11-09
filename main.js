@@ -1,9 +1,3 @@
-// On hover on column add buttons on top that take color when column on hover
-
-
-
-
-
 //$('#welcome').hide()
 //$('#game').hide()
 //$('#winner').hide()
@@ -11,6 +5,9 @@
 var plus = [1, 2, 3];
 var zero = [0, 0, 0];
 var minus = [-1, -2, -3];
+
+var nbrCols;
+var nbrRows;
 
 var iterations = {
     i: [plus, plus, zero, minus, minus, minus, zero, plus],
@@ -131,14 +128,22 @@ var check = function() {
 var updateScore = function() {
     this.currentPlayer.score++;
     alert(this.currentPlayer.name + " wins!");
-    this.initialize(7, 6);
+    this.initialize(nbrCols, nbrRows);
+
+    $("#score1").text(newGame.player1.score)
+    $("#score2").text(newGame.player2.score)
+
 }
 
 var updateCurrentPlayer = function() {
     if (this.currentPlayer === this.player1) {
         this.currentPlayer = this.player2;
+        $("#p1stats").css("background-color", "white")
+        $("#p2stats").css("background-color", newGame.player2.color)
     } else {
         this.currentPlayer = this.player1;
+        $("#p1stats").css("background-color", newGame.player1.color)
+        $("#p2stats").css("background-color", "white")
     }
 
 }
@@ -186,7 +191,20 @@ $('#startGame').on("click", function() {
     var player2name = $('#player2name').val()
     var player2color = $('#player2color').val()
     newGame = Game(player1name, player1color, player2name, player2color);
-    newGame.initialize(7, 6);
+
+    var nbrCols = $('#columns').val()
+    var nbrRows = $('#rows').val()
+
+    newGame.initialize(nbrCols, nbrRows)
+
+    $("#p1stats").css("border-color", newGame.player1.color)
+    $("#p2stats").css("border-color", newGame.player2.color)
+    $("#p1stats").append('<h3>' + newGame.player1.name + '</h3>')
+    $("#p2stats").append('<h3>' + newGame.player2.name + '</h3>')
+    $("#p1stats").append('<h5>Score: <h5 id="score1">' + newGame.player1.score + '</h5></h5>')
+    $("#p2stats").append('<h5>Score: <h5 id="score2">' + newGame.player2.score + '</h5></h5>')
+    $("#p1stats").css("background-color", newGame.player1.color)
+
     console.table(newGame.playBoard);
 
     $('.column').on('click', function() {
@@ -205,9 +223,9 @@ $('#startGame').on("click", function() {
 
 
     $('#updateSize').on('click', function() {
-        var newCol = $('#changeCols').val()
-        var newRows = $('#changeCols').val()
-        newGame.initialize(newCol, newRows)
+        nbrCols = $('#columns').val()
+        nbrRows = $('#rows').val()
+        newGame.initialize(nbrCols, nbrRows)
     })
 
 })

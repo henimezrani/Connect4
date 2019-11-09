@@ -24,6 +24,10 @@
                 <div id="place">
                     <p>Your favorite color:</p><input type="text" id="player2color" placeholder="text or hex - red if invalid input">
                 </div>
+                <div id="place">
+                    <p>Columns x Rows:</p><input type="text" id="columns" placeholder="# of columns">
+                    <span> X </span> <input type="text" id="rows" placeholder="# of rows">
+                </div>
 
             </div>
             <div> <button id="startGame">Play!</button></div>
@@ -33,14 +37,25 @@
         <main id="stats">
 
         </main>
+        <div id="main-section">
+            <div id="allBoard">
+                <main id="prePlayBoard">
 
-        <main id="prePlayBoard">
+                </main>
+                <main id="playBoard">
 
-        </main>
-        <main id="playBoard">
+                </main>
+            </div>
+            <div id="playerStats">
+                <div id="firstPlayer">
+                    <div class="centeredContent" id="p1stats"></div>
+                </div>
+                <div id="secondPlayer">
+                    <div class="centeredContent" id="p2stats"></div>
+                </div>
 
-        </main>
-
+            </div>
+        </div>
     </section>
     <section id="winner">
 
