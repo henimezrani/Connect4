@@ -1,19 +1,21 @@
-//$('#welcome').hide()
-//$('#game').hide()
-//$('#winner').hide()
-// ***************** Global vars
+// **************** Global and temporary variables
+
+//Used for the check function after coming up with the algorithm
 var plus = [1, 2, 3];
 var zero = [0, 0, 0];
 var minus = [-1, -2, -3];
-
-var nbrCols;
-var nbrRows;
-
 var iterations = {
     i: [plus, plus, zero, minus, minus, minus, zero, plus],
     j: [zero, minus, minus, minus, zero, plus, plus, plus]
 }
 
+// Temporary vars
+var nbrCols;
+var nbrRows;
+
+// ***************** Contructors
+
+//Used to create two instances of the object player 
 function Player(name, number, color) {
     var player = {};
 
@@ -25,31 +27,35 @@ function Player(name, number, color) {
     return player;
 }
 
-// ***************** Constructors
-
+// Contains all the methods for the game
 function Game(player1name, player1color, player2name, player2color) {
     var game = {};
 
-    game.playBoard = [];
+    // Properties
+
+    game.playBoard = []; // 2-dimentional array representing the playBoard
     game.player1 = Player(player1name, 1, validateColor(player1color, "yellow"));
     game.player2 = Player(player2name, 2, validateColor(player2color, "red"));
-    game.totalPlays = 42;
-    game.currentPlayer; // true when player one turn
+    game.currentPlayer; // takes the current player as object
 
-    game.initialize = initialize;
-    game.addValue = addValue;
-    game.check = check;
-    game.updateScore = updateScore;
+    // Methods
 
-    game.updateCurrentPlayer = updateCurrentPlayer;
-    //game.play = play;
+    game.initialize = initialize; // initialize the playBoard to all 0 depending on the nbr of rows and columns
+    game.addValue = addValue; // add a value to the board, visually and on the matrix as well
+    game.check = check; // checks if the condition is fulfilles after each move
+    game.updateScore = updateScore; // update the score if check if true 
+    game.updateCurrentPlayer = updateCurrentPlayer; // update current player after each turn
+    game.play = play; // play the actual game
 
     return game;
 }
 
+// ****************** Methods for the constructors
+
 var initialize = function(nCols, nRows) {
     this.playBoard = [];
     $('#playBoard').html('');
+    $('#prePlayBoard').html('');
     this.currentPlayer = this.player1;
     for (var i = 0; i < nCols; i++) {
         $('#prePlayBoard').append('<div class="column" id="pre' + i + '"></div>')
@@ -66,13 +72,13 @@ var initialize = function(nCols, nRows) {
         this.playBoard.push(tmpArr);
     }
     for (var i = 0; i < nCols; i++) {
+
         $('#playBoard').append('<div class="column" id="' + i + '"></div>')
         for (var j = 0; j < nRows; j++) {
             $('#' + i).append('<div class="row" id="c' + i + 'r' + j + '"><div>')
         }
     }
 
-    this.totalPlays = nRows * nCols;
 }
 
 var addValue = function(column) {
@@ -80,6 +86,7 @@ var addValue = function(column) {
     var canAdd = false;
     for (var i = this.playBoard.length - 1; i >= 0; i--) {
         if (this.playBoard[i][column] === 0) {
+            console.log(this.currentPlayer.number)
             this.playBoard[i][column] = this.currentPlayer.number;
             canAdd = true; // full colun
             $('#c' + column + 'r' + i).css('background-color', this.currentPlayer.color)
@@ -90,11 +97,9 @@ var addValue = function(column) {
         alert("column full");
         return;
     }
-    this.check();
+
 
 }
-
-
 
 var check = function() {
 
@@ -127,12 +132,12 @@ var check = function() {
 
 var updateScore = function() {
     this.currentPlayer.score++;
-    alert(this.currentPlayer.name + " wins!");
+
     this.initialize(nbrCols, nbrRows);
 
     $("#score1").text(newGame.player1.score)
     $("#score2").text(newGame.player2.score)
-
+    this.play();
 }
 
 var updateCurrentPlayer = function() {
@@ -148,8 +153,33 @@ var updateCurrentPlayer = function() {
 
 }
 
+var play = function() {
+    var that = this
+    $('.column').on('click', function() {
+        that.addValue($(this).attr('id'));
+        that.check();
+    })
 
 
+
+    $('.column').mouseover(function() {
+        $('#pre' + $(this).attr('id') + 'r-1').css('background-color', newGame.currentPlayer.color)
+    })
+
+    $('.column').mouseout(function() {
+        $('#pre' + $(this).attr('id') + 'r-1').css('background-color', "white")
+    })
+
+
+    $('#updateSize').on('click', function() {
+        nbrCols = $('#columns').val()
+        nbrRows = $('#rows').val()
+        that.initialize(nbrCols, nbrRows)
+    })
+}
+
+
+// BONUS ****************** The user can choose any color he wants
 
 function validateColor(input, defaultVal) {
     var colorValidation = ["Pink", "LightPink", "HotPink", "DeepPink", "PaleVioletRed", "MediumVioletRed", "LightSalmon", "Salmon", "DarkSalmon", "LightCoral", "IndianRed", "Crimson", "Firebrick", "DarkRed", "Red",
@@ -185,15 +215,22 @@ function validateColor(input, defaultVal) {
     return defaultVal;
 }
 
+// ****************** Execution upon click on "Play"
+var player1name;
+var player1color;
+var player2name;
+var player2color;
+var nbrCols;
+var nbrRows;
 $('#startGame').on("click", function() {
-    var player1name = $('#player1name').val()
-    var player1color = $('#player1color').val()
-    var player2name = $('#player2name').val()
-    var player2color = $('#player2color').val()
+    player1name = $('#player1name').val()
+    player1color = $('#player1color').val()
+    player2name = $('#player2name').val()
+    player2color = $('#player2color').val()
     newGame = Game(player1name, player1color, player2name, player2color);
 
-    var nbrCols = $('#columns').val()
-    var nbrRows = $('#rows').val()
+    nbrCols = $('#columns').val()
+    nbrRows = $('#rows').val()
 
     newGame.initialize(nbrCols, nbrRows)
 
@@ -205,27 +242,6 @@ $('#startGame').on("click", function() {
     $("#p2stats").append('<h5>Score: <h5 id="score2">' + newGame.player2.score + '</h5></h5>')
     $("#p1stats").css("background-color", newGame.player1.color)
 
-    console.table(newGame.playBoard);
-
-    $('.column').on('click', function() {
-        newGame.addValue($(this).attr('id'));
-    })
-
-
-
-    $('.column').mouseover(function() {
-        $('#pre' + $(this).attr('id') + 'r-1').css('background-color', newGame.currentPlayer.color)
-    })
-
-    $('.column').mouseout(function() {
-        $('#pre' + $(this).attr('id') + 'r-1').css('background-color', "white")
-    })
-
-
-    $('#updateSize').on('click', function() {
-        nbrCols = $('#columns').val()
-        nbrRows = $('#rows').val()
-        newGame.initialize(nbrCols, nbrRows)
-    })
-
+    $('#welcome').hide()
+    newGame.play();
 })
