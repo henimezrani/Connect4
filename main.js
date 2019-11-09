@@ -58,9 +58,9 @@ var initialize = function(nCols, nRows) {
     $('#prePlayBoard').html('');
     this.currentPlayer = this.player1;
     for (var i = 0; i < nCols; i++) {
-        $('#prePlayBoard').append('<div class="column" id="pre' + i + '"></div>')
+        $('#prePlayBoard').append('<div class="precolumn" id="pre' + i + '"></div>')
         for (var j = -1; j < 0; j++) {
-            $('#pre' + i).append('<div class="row" id="pre' + i + 'r' + j + '"><div>')
+            $('#pre' + i).append('<div class="prerow" id="pre' + i + 'r' + j + '"><div>')
         }
     }
     for (var i = 0; i < nRows; i++) {
@@ -167,7 +167,7 @@ var play = function() {
     })
 
     $('.column').mouseout(function() {
-        $('#pre' + $(this).attr('id') + 'r-1').css('background-color', "white")
+        $('#pre' + $(this).attr('id') + 'r-1').css('background-color', "transparent")
     })
 
 
@@ -183,13 +183,13 @@ var play = function() {
 
 function validateColor(input, defaultVal) {
     var colorValidation = ["Pink", "LightPink", "HotPink", "DeepPink", "PaleVioletRed", "MediumVioletRed", "LightSalmon", "Salmon", "DarkSalmon", "LightCoral", "IndianRed", "Crimson", "Firebrick", "DarkRed", "Red",
-        "OrangeRed", "Tomato", "Coral", "DarkOrange", "Orange", "Yellow", "LightYellow", "LemonChiffon", "LightGoldenrodYellow ", "PapayaWhip", "Moccasin", "PeachPuff", "PaleGoldenrod", "Khaki", "DarkKhaki", "Gold",
+        "OrangeRed", "Tomato", "Coral", "DarkOrange", "Orange", "Yellow", "LightYellow", "LemonChiffon", "LightGoldenrodYellow ", "PapayaWhip", "Moccasin", "PeachPuff", "PaleGoldenrod", "Khaki", "DarkKhaki", "Gold",
         "Cornsilk", "BlanchedAlmond", "Bisque", "NavajoWhite", "Wheat", "Burlywood", "Tan", "RosyBrown", "SandyBrown", "Goldenrod", "DarkGoldenrod", "Peru", "Chocolate", "SaddleBrown", "Sienna", "Brown", "Maroon",
-        "DarkOliveGreen", "Olive", "OliveDrab", "YellowGreen", "LimeGreen", "Lime", "LawnGreen", "Chartreuse", "GreenYellow", "SpringGreen", "MediumSpringGreen ", "LightGreen", "PaleGreen", "DarkSeaGreen", "MediumAquamarine",
+        "DarkOliveGreen", "Olive", "OliveDrab", "YellowGreen", "LimeGreen", "Lime", "LawnGreen", "Chartreuse", "GreenYellow", "SpringGreen", "MediumSpringGreen ", "LightGreen", "PaleGreen", "DarkSeaGreen", "MediumAquamarine",
         "MediumSeaGreen", "SeaGreen", "ForestGreen", "Green", "DarkGreen", "Aqua", "Cyan", "LightCyan", "PaleTurquoise", "Aquamarine", "Turquoise", "MediumTurquoise", "DarkTurquoise", "LightSeaGreen", "CadetBlue",
         "DarkCyan", "Teal", "LightSteelBlue", "PowderBlue", "LightBlue", "SkyBlue", "LightSkyBlue", "DeepSkyBlue", "DodgerBlue", "CornflowerBlue", "SteelBlue", "RoyalBlue", "Blue", "MediumBlue", "DarkBlue", "Navy",
         "MidnightBlue", "Lavender", "Thistle", "Plum", "Violet", "Orchid", "Fuchsia", "Magenta", "MediumOrchid", "MediumPurple", "BlueViolet", "DarkViolet", "DarkOrchid", "DarkMagenta", "Purple", "Indigo", "DarkSlateBlue",
-        "SlateBlue", "MediumSlateBlue ", "White", "Snow", "Honeydew", "MintCream", "Azure", "AliceBlue", "GhostWhite", "WhiteSmoke", "Seashell", "Beige", "OldLace", "FloralWhite", "Ivory", "AntiqueWhite", "Linen",
+        "SlateBlue", "MediumSlateBlue ", "White", "Snow", "Honeydew", "MintCream", "Azure", "AliceBlue", "GhostWhite", "WhiteSmoke", "Seashell", "Beige", "OldLace", "FloralWhite", "Ivory", "AntiqueWhite", "Linen",
         "LavenderBlush", "MistyRose", "Gainsboro", "LightGray", "Silver", "DarkGray", "Gray", "DimGray", "LightSlateGray", "SlateGray", "DarkSlateGray", "Black"
     ].map(x => x.toLowerCase());
     var hexValidation = ["a", "b", "c", "d", "e", "f", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0"].join('')
